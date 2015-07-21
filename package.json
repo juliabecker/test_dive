@@ -1,0 +1,11 @@
+{
+  "name": "pixsy_test_dive",
+  "version": "0.0.0",
+  "main": "app.js",
+  "author": "Julia Becker",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "express": "^4.13.1",
+    "morgan": "^1.6.1"
+  }
+}
