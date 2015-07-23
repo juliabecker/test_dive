@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Pixsy Test Dive</title>
-</head>
-<body>
+{{{templates.header}}}
   <h1>Login</h1>
-  <form method="POST" action="/session">
+  <form method="POST" action="/login">
     <label>Username:</label>
     <input type="text" name="username" required>
     <label>Password:</label>
     <input type="password" name="password" required>
     <button type="submit">Log In</button>
   </form>
-</body>
-</html>
+{{{templates.footer}}}
