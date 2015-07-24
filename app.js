@@ -7,7 +7,8 @@ var bodyParser = require('body-parser')
 var app = express();
 
 app.use(morgan('dev'));
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // Include templates
 var templates = require("./views.js");
