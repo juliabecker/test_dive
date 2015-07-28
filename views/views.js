@@ -14,5 +14,10 @@ module.exports = {
   login: function() {
     var loginTemplate = fs.readFileSync('views/login.html', 'utf8');
     return loginTemplate;
+  },
+
+  index: function() {
+    var indexTemplate = fs.readFileSync('views/index.html', 'utf8');
+    return indexTemplate;
   }
 }

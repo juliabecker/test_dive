@@ -1,12 +1,13 @@
 {
   "name": "pixsy_test_dive",
   "version": "0.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "author": "Julia Becker",
   "dependencies": {
     "body-parser": "^1.13.2",
     "express": "^4.13.1",
+    "express-session": "^1.11.3",
     "morgan": "^1.6.1",
-    "mustache": "^2.1.2"
+    "mustache": "^2.1.3"
   }
 }
