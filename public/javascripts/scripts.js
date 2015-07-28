@@ -1,17 +1,5 @@
 $(document).ready(function() {
 
-// var indexTemplate = $('script[data-id="index-template"]').text();
-
-//   // Client-Side Routes
-//   var routes = {
-//     "/": showIndex,
-//     // "/login": showLogin,
-//   }
-
-//   // Initialize router
-//   var router = Router(routes);
-//   router.init('/');
-
   // Login form submitted
   $('#login-form').submit(function(event) {
     event.preventDefault();
@@ -29,9 +17,10 @@ $(document).ready(function() {
     };
 
     // Verify credentials on server
+    // Display error on page if username or password incorrect
+    // Otherwise, redirect to index route
     postLoginInfo(userInfo).done(function(result) {
       if (result.username) {
-        console.log('logged in');
         window.location.href = '/'
       } else if (result.loginStatus === 0) {
         showError('password')
@@ -40,11 +29,11 @@ $(document).ready(function() {
       }
     })
 
-
   });
 
 });
 
+// Removes error messages from login form
 function clearError() {
   $('#username-group').removeClass('has-error');
   $('#password-group').removeClass('has-error');
@@ -52,17 +41,14 @@ function clearError() {
   $('#password-error').hide();
 }
 
+// Displays error message on form, given which field is incorrect (username or password)
 function showError(field) {
   $('#' + field + '-group').addClass('has-error');
   $('input[name="' + field + '"]').focus();
   $('#' + field + '-error').show();
 }
 
-function showIndex(username) {
-  $('body').append(Mustache.render(indexTemplate, {user: username}));
-}
-
-// Send user info to server
+// Send user entered credentials to server for verification
 function postLoginInfo(userObj) {
 
   return $.ajax({

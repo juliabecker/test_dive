@@ -1,3 +1,4 @@
+// Establish app dependencies
 var express = require('express');
 var fs = require('fs');
 var morgan = require('morgan');
@@ -5,8 +6,8 @@ var mustache = require('mustache');
 var bodyParser = require('body-parser')
 var session = require('express-session')
 
+// Initialize app & dependencies
 var app = express();
-
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({
   extended: false
@@ -23,6 +24,9 @@ var templates = require("./views/views.js");
 // Establish session as global variable
 var sess;
 
+// Index route
+// Redirect to login if user not logged in (no username stored in session)
+// Otherwise, display index page with user's username
 app.get('/', function(req, res) {
   sess = req.session;
 
@@ -38,32 +42,40 @@ app.get('/', function(req, res) {
 
 });
 
-// Login view
+// Login route
+// Redirect to index page if user logged in
+// Otherwise, display login form 
 app.get('/login', function(req, res) {
   sess = req.session;
 
-  if (sess.loginStatus === 0) {
-    console.log('login status 0')
+  if (sess.username) {
+    res.redirect('/')
+  } else {
+    var loginTemplate = mustache.render(templates.login(), {
+      "templates": templates
+    });
+    res.send(loginTemplate);
   }
-
-  var loginTemplate = mustache.render(templates.login(), {
-    "templates": templates
-  });
-  res.send(loginTemplate);
 });
 
-
+// Logout route
+// Destroy session & redirect to login
 app.get('/logout', function(req, res) {
 
   req.session.destroy(function(err) {
     if (err) {
       console.log(err);
     } else {
-      res.redirect('/');
+      res.redirect('/login');
     }
   });
 });
 
+// Login POST route
+// Verifies user credentials and sends appropriate response to client in the form of "loginStatus"
+// loginStatus === 1 if username & password are correct
+// loginStatus === 0 if username is found, but password is incorrect
+// loginStatus === 2 if username is not found
 app.post('/login', function(req, res) {
   sess = req.session;
   var userInput = req.body;
@@ -84,28 +96,8 @@ app.post('/login', function(req, res) {
       loginStatus: 2
     });
   }
-
-
-  // if (loginStatus === 1) {
-  //   sess.username = userInput.username;
-  //   res.status(200).send({redirect: '/'});
-  //   console.log('response code 200')
-  // } else if (loginStatus === 0) {
-  //   sess.loginStatus = 0;
-  //   res.send({redirect: '/login'});
-  //   console.log('response code 401')
-  // } else {
-  //   sess.loginStatus = 2;
-  //   res.send({redirect: '/login'});
-  //   console.log('response code 401')
-  // }
 });
 
-
-
-app.listen(3000, function() {
-  console.log("Listening on port 3000");
-});
 
 // Checks user-entered username & password against JSON db
 // Returns 1 if username & password correct
@@ -131,3 +123,7 @@ function checkUserCredentials(userInputObj) {
   }
   return response;
 }
+
+app.listen(3000, function() {
+  console.log("Listening on port 3000");
+});
