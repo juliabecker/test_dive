@@ -40,6 +40,11 @@ app.get('/', function(req, res) {
 
 // Login view
 app.get('/login', function(req, res) {
+  sess = req.session;
+
+  if (sess.loginStatus === 0) {
+    console.log('login status 0')
+  }
 
   var loginTemplate = mustache.render(templates.login(), {
     "templates": templates
@@ -47,15 +52,6 @@ app.get('/login', function(req, res) {
   res.send(loginTemplate);
 });
 
-// app.get('/welcome', function(req, res) {
-//   sess = req.session;
-//   var welcomeTemplate = mustache.render(templates.welcome(), {
-//     "templates": templates,
-//     "user": sess.username
-//   });
-//   console.log(sess.username)
-//   res.send(welcomeTemplate);
-// });
 
 app.get('/logout', function(req, res) {
 
@@ -72,18 +68,37 @@ app.post('/login', function(req, res) {
   sess = req.session;
   var userInput = req.body;
 
-  var loginResponse = checkUserCredentials(userInput);
+  var loginStatus = checkUserCredentials(userInput);
 
-  if (loginResponse === 1) {
+  if (loginStatus === 1) {
     sess.username = userInput.username;
-    res.send({redirect: '/'});
-    console.log('response code 200')
-  } else if (loginResponse === 0) {
-    // res.redi
-    console.log('response code 401')
+    res.json({
+      username: userInput.username
+    })
+  } else if (loginStatus === 0) {
+    res.json({
+      loginStatus: 0
+    });
   } else {
-    console.log('response code 401')
+    res.json({
+      loginStatus: 2
+    });
   }
+
+
+  // if (loginStatus === 1) {
+  //   sess.username = userInput.username;
+  //   res.status(200).send({redirect: '/'});
+  //   console.log('response code 200')
+  // } else if (loginStatus === 0) {
+  //   sess.loginStatus = 0;
+  //   res.send({redirect: '/login'});
+  //   console.log('response code 401')
+  // } else {
+  //   sess.loginStatus = 2;
+  //   res.send({redirect: '/login'});
+  //   console.log('response code 401')
+  // }
 });
 
 
