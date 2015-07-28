@@ -21,7 +21,7 @@ app.use(session({
 // Include templates
 var templates = require("./views/views.js");
 
-// Establish session as global variable
+// Establish session as global variable for referencing on all routes
 var sess;
 
 // Index route
@@ -124,6 +124,6 @@ function checkUserCredentials(userInputObj) {
   return response;
 }
 
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
   console.log("Listening on port 3000");
 });
